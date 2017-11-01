@@ -74,14 +74,31 @@ RSpec.describe Book, type: :model do
       end
     end
 
-    xdescribe "publisher match" do
+    describe "publisher match" do
       let(:publisher) { create(:publisher, name: "Find & Co.")}
       let!(:book_publisher) { create(:book, publisher: publisher ) }
       let!(:reviews_publisher) { create_list(:book_review, 3, book: book_publisher)}
 
+      it "should return the book with the publisher" do
+        search_results = Book.search(publisher.name)
+        expect(search_results).to be_a ActiveRecord::Relation
+        expect(search_results.length).to eq 1
+        expect(search_results).to include(book_publisher)
+        expect(search_results).not_to include(book_no_find)
+      end
     end
 
-    xdescribe "partial title match" do
+    describe "partial title match" do
+      let!(:book_title) { create(:book, title: "Find Yourself Title") }
+      let!(:reviews_title) { create_list(:book_review, 3, book: book_title)}
+
+      it "should return the book with the matching title" do
+        search_results = Book.search("Find")
+        expect(search_results).to be_a ActiveRecord::Relation
+        expect(search_results.length).to eq 1
+        expect(search_results).to include(book_title)
+        expect(search_results).not_to include(book_no_find)
+      end
 
       context "when using title only flag" do
       end

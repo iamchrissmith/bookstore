@@ -20,9 +20,9 @@ class Book < ApplicationRecord
   end
 
   def self.search(query, options = {})
-    joins(:author, :book_reviews)
+    joins(:author, :book_reviews, :publisher)
     .select("books.*", "avg(book_reviews.rating) AS rating")
-    .where("lower(authors.last_name) = ?", query.downcase)
+    .where("lower(authors.last_name) = :query OR lower(publishers.name) = :query OR lower(title) LIKE :fuzzy", {query: query.downcase, fuzzy: "%#{query.downcase}%"})
     .group(:id)
     .order("rating DESC")
   end
