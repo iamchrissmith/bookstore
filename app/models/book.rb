@@ -22,7 +22,7 @@ class Book < ApplicationRecord
   def self.search(query, options = {})
     joins(:author, :book_reviews)
     .select("books.*", "avg(book_reviews.rating) AS rating")
-    .where(authors: {last_name:query})
+    .where("lower(authors.last_name) = ?", query.downcase)
     .group(:id)
     .order("rating DESC")
   end

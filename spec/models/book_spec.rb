@@ -64,6 +64,14 @@ RSpec.describe Book, type: :model do
         expect(search_results).to include(book_author)
         expect(search_results).not_to include(book_no_find)
       end
+
+      it "should return the book with the last name - case insensitive" do
+        search_results = Book.search("FINDERSON")
+        expect(search_results).to be_a ActiveRecord::Relation
+        expect(search_results.length).to eq 1
+        expect(search_results).to include(book_author)
+        expect(search_results).not_to include(book_no_find)
+      end
     end
 
     xdescribe "publisher match" do
