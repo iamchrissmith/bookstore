@@ -18,4 +18,12 @@ class Book < ApplicationRecord
   def average_rating
     book_reviews.average(:rating).to_i.round(1)
   end
+
+  def self.search(query, options = {})
+    joins(:author, :book_reviews)
+    .select("books.*", "avg(book_reviews.rating) AS rating")
+    .where(authors: {last_name:query})
+    .group(:id)
+    .order("rating DESC")
+  end
 end
