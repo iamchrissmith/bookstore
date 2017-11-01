@@ -24,14 +24,16 @@ class Book < ApplicationRecord
                 .select("books.*", "avg(book_reviews.rating) AS rating")
                 
 
-    if options[:book_format_physical]
+    if options[:book_format_type_id] || options[:book_format_physical]
       books = books.joins(:book_format_types)
-                   .where("book_format_types.physical = ? ", options[:book_format_physical])
+    end
+
+    if options[:book_format_physical]
+      books = books.where("book_format_types.physical = ? ", options[:book_format_physical])
     end
 
     if options[:book_format_type_id]
-      books = books.joins(:book_format_types)
-                   .where("book_format_types.id = ? ", options[:book_format_type_id])
+      books = books.where("book_format_types.id = ? ", options[:book_format_type_id])
     end
 
     if options[:title_only]
