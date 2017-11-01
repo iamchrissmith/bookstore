@@ -2,7 +2,7 @@
 
 ## Application Model Specifications
 
-Code for the other models is not supplied.  All models have an “id” field as their primary key.  
+Code for the other models are not implemented but described below.  All models have an “id” field as their primary key.
 
 ### Publisher
 
