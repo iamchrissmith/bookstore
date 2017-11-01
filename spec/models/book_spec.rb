@@ -60,8 +60,8 @@ RSpec.describe Book, type: :model do
       it "should return the book with the last name" do
         search_results = Book.search(author.last_name)
         expect(search_results).to be_a ActiveRecord::Relation
-        expect(search_results.length).to eq 1
         expect(search_results).to include(book_author)
+        expect(search_results.length).to eq 1
         expect(search_results).not_to include(book_no_find)
       end
 
@@ -101,14 +101,50 @@ RSpec.describe Book, type: :model do
       end
 
       context "when using title only flag" do
+        let(:author) { create(:author, last_name:"Find") }
+        let!(:book_author) { create(:book, author: author ) }
+        let!(:reviews_author) { create_list(:book_review, 3, book: book_author)}
+
+        it "should return the book with the matching title" do
+          search_results = Book.search("Find", {title_only: true})
+          expect(search_results).to be_a ActiveRecord::Relation
+          expect(search_results.length).to eq 1
+          expect(search_results).to include(book_title)
+          expect(search_results).not_to include(book_no_find)
+          expect(search_results).not_to include(book_author)
+        end
       end
     end
 
-    xdescribe "multiple criteria matches" do
+    describe "multiple criteria matches" do
+      let(:author) { create(:author, last_name:"Find") }
+      let!(:book_multiple) { create(:book, title: "Find Yourself Title", author: author ) }
+      let!(:reviews_multiple) { create_list(:book_review, 3, book: book_multiple)}
+      let!(:book_multiple_2) { create(:book, title: "Find Another" ) }
+      let!(:reviews_multiple_2) { create_list(:book_review, 3, book: book_multiple_2, rating: 0)}
 
-      it "book should not be duplicated when it matches multiple criteria"
+      it "returns multiple books not duplicated and ordered correctly" do 
+        search_results = Book.search("Find")
+        expect(search_results).to be_a ActiveRecord::Relation
+        expect(search_results.length).to eq 2
+        expect(search_results[0]).to eq book_multiple
+        expect(search_results[1]).to eq book_multiple_2
+        expect(search_results).not_to include(book_no_find)
+      end
 
       context "when using format_type flag" do
+        let(:book_type_1) { create(:book_format_type) }
+        let(:book_type_2) { create(:book_format_type) }
+        let!(:book_format) { create(:book_format, book: book_multiple, book_format_type: book_type_1)}
+        let!(:book_format_no_find) { create(:book_format, book: book_no_find, book_format_type: book_type_2)}
+
+        it "returns books that only match the format" do 
+          search_results = Book.search("Find", {book_format_type_id: book_type_1.id})
+          expect(search_results).to be_a ActiveRecord::Relation
+          expect(search_results.length).to eq 1
+          expect(search_results).to include(book_multiple)
+          expect(search_results).not_to include(book_no_find)
+        end
       end
 
       context "when using format_physical flag" do
