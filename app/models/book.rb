@@ -14,4 +14,9 @@ class Book < ApplicationRecord
   def author_name
     "#{author.last_name}, #{author.first_name}"
   end
+
+  def average_rating
+    ratings = book_reviews.pluck(:rating)
+    (ratings.sum / ratings.length).round(1)
+  end
 end

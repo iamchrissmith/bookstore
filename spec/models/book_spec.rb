@@ -36,4 +36,15 @@ RSpec.describe Book, type: :model do
       expect(book.author_name).to eq "#{author.last_name}, #{author.first_name}"
     end
   end
+
+  describe "#average_rating" do
+    let(:book) { create(:book) }
+    let!(:reviews) { create_list(:book_review, 3, book: book)}
+
+    it "should return the mean of the reviews for the book (1 decimal accuracy)" do
+      average = ((reviews[0].rating + reviews[1].rating + reviews[2].rating) / 3).round(1)
+      expect(book.average_rating).to be_an Float
+      expect(book.average_rating).to eq average
+    end
+  end
 end
