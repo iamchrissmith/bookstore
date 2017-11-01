@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :book_format do
-    book nil
-    bookformattype nil
+    book
+    book_format_type
   end
 end

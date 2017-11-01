@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :book_review do
-    book nil
+    book
     rating 1
   end
 end

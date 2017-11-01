@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :book do
     title "MyString"
-    publisher nil
-    author nil
+    publisher
+    author
   end
 end

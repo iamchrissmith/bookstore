@@ -14,4 +14,16 @@ RSpec.describe Book, type: :model do
     it { should validate_presence_of(:publisher_id) }
     it { should validate_presence_of(:author_id) }
   end
+
+  describe "#book_format_types" do
+    let(:book) { create(:book) }
+    let(:book_format_type) { create(:book_format_type) }
+    let!(:book_format) { create(:book_format, book: book, book_format_type: book_format_type) }
+
+    it 'retuns ["Default format"] for book' do 
+      expect(book.book_format_types).to be_a ActiveRecord::Associations::CollectionProxy
+      expect(book.book_format_types.length).to eq 1
+      expect(book.book_format_types[0]).to eq book_format_type
+    end
+  end
 end
