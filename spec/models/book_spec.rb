@@ -26,4 +26,14 @@ RSpec.describe Book, type: :model do
       expect(book.book_format_types[0]).to eq book_format_type
     end
   end
+
+  describe "#author_name" do
+    let(:author) { create(:author, first_name: "CFName", last_name: "CLNAME") }
+    let!(:book) { create(:book, author: author) }
+
+    it 'returns author name for the book' do
+      expect(book.author_name).to be_a String
+      expect(book.author_name).to eq "#{author.last_name}, #{author.first_name}"
+    end
+  end
 end

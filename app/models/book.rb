@@ -10,4 +10,8 @@ class Book < ApplicationRecord
   validates :title, presence: true
   validates :publisher_id, presence: true
   validates :author_id, presence: true
+
+  def author_name
+    "#{author.last_name}, #{author.first_name}"
+  end
 end

@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :author do
-    first_name "MyString"
-    last_name "MyString"
+    first_name "FName"
+    last_name "LName"
   end
 end
