@@ -52,7 +52,7 @@ group :development, :test do
   gem 'capybara'
   gem 'launchy'
   gem 'shoulda-matchers'
-  gem 'factory_girl_rails', '~> 4.0'
+  gem 'factory_bot_rails', '~> 4.8.2'
   gem 'pry-rails'
   gem 'pry-state'
   gem 'pry-byebug'
