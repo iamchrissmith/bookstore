@@ -1,5 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe BookFormatType, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  context "relationships" do
+    it { should have_many :book_formats }
+    it { should have_many :books }
+  end
 end

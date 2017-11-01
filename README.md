@@ -21,7 +21,7 @@ Key fields:
 
 ### BookFormatType
 
-The formats that a book may be available in.  Assume there will be ~10 tot
+The formats that a book may be available in.  Assume there will be ~10 total
 Key fields:
 
 * `#name` (string)  such as “Hardcover”, “Softcover” , “Kindle”, “PDF”
