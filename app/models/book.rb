@@ -16,7 +16,6 @@ class Book < ApplicationRecord
   end
 
   def average_rating
-    ratings = book_reviews.pluck(:rating)
-    (ratings.sum / ratings.length).round(1)
+    book_reviews.average(:rating).to_i.round(1)
   end
 end
