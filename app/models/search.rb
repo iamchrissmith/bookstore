@@ -6,7 +6,6 @@ class Search
   end
 
   def run
-    
     execute_search(@books).group(:id).order("rating DESC")
   end
 
@@ -40,7 +39,7 @@ class Search
              .where("lower(authors.last_name) = :query OR lower(publishers.name) = :query OR lower(title) LIKE :fuzzy", 
                    {query: query.downcase, fuzzy: "%#{query.downcase}%"})
       end
-      
+
       books
     end
 end
