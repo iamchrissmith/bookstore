@@ -22,11 +22,7 @@ class Book < ApplicationRecord
   def self.search(query, options = {})
     books = setup_book_search_query
 
-    if options[:book_format_type_id] || options[:book_format_physical] != nil
-      books = setup_book_format_query(books,options)
-    end
-
-    execute_search(books, query, options).group(:id).order("rating DESC")
+    Search.new(books, query, options).run
   end
 
   private
@@ -34,29 +30,5 @@ class Book < ApplicationRecord
     def self.setup_book_search_query
       joins(:book_reviews)
       .select("books.*", "avg(book_reviews.rating) AS rating")
-    end
-
-    def self.setup_book_format_query(books, options)
-      books = books.joins(:book_format_types)
-
-      if options[:book_format_physical] != nil
-        books = books.where("book_format_types.physical = ? ", options[:book_format_physical])
-      end
-  
-      if options[:book_format_type_id]
-        books = books.where("book_format_types.id = ? ", options[:book_format_type_id])
-      end
-
-      books
-    end
-
-    def self.execute_search(books, query, options)
-      if options[:title_only]
-        books.where("lower(title) LIKE ?", "%#{query.downcase}%")
-      else   
-        books.joins(:author, :publisher)
-             .where("lower(authors.last_name) = :query OR lower(publishers.name) = :query OR lower(title) LIKE :fuzzy", 
-                   {query: query.downcase, fuzzy: "%#{query.downcase}%"})
-      end
     end
 end
