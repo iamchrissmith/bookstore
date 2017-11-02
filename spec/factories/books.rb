@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :book do
-    title "MyString"
+    title "My String"
     publisher
     author
   end

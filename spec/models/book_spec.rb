@@ -148,6 +148,27 @@ RSpec.describe Book, type: :model do
       end
 
       context "when using format_physical flag" do
+        let(:book_type_1) { create(:book_format_type, physical: true) }
+        let(:book_type_2) { create(:book_format_type) }
+        let!(:book_format) { create(:book_format, book: book_multiple, book_format_type: book_type_1)}
+        let!(:book_format_no_find) { create(:book_format, book: book_no_find, book_format_type: book_type_2)}
+
+        it "returns books that only match physical flag - true" do 
+          search_results = Book.search("Find", {book_format_physical: true})
+          expect(search_results).to be_a ActiveRecord::Relation
+          expect(search_results.length).to eq 1
+          expect(search_results).to include(book_multiple)
+          expect(search_results).not_to include(book_no_find)
+        end
+
+        it "returns books that only match physical flag - false" do 
+          search_results = Book.search(" ", {book_format_physical: false})
+          expect(search_results).to be_a ActiveRecord::Relation
+          expect(search_results.length).to eq 1
+          expect(search_results).not_to include(book_multiple)
+          expect(search_results).not_to include(book_multiple_2)
+          expect(search_results).to include(book_no_find)
+        end
       end
 
       context "when using multiple flags" do

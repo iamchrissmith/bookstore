@@ -22,13 +22,12 @@ class Book < ApplicationRecord
   def self.search(query, options = {})
     books = Book.joins(:book_reviews)
                 .select("books.*", "avg(book_reviews.rating) AS rating")
-                
 
-    if options[:book_format_type_id] || options[:book_format_physical]
+    if options[:book_format_type_id] || options[:book_format_physical] != nil
       books = books.joins(:book_format_types)
     end
 
-    if options[:book_format_physical]
+    if options[:book_format_physical] != nil
       books = books.where("book_format_types.physical = ? ", options[:book_format_physical])
     end
 
